@@ -55,7 +55,7 @@ def boot_workers(specs: list[dict]) -> list[subprocess.Popen]:
     return procs
 
 
-def run_scenario(name: str, specs: list[dict]) -> None:
+def run_scenario(name: str, specs: list[dict], expected_accepted: str) -> None:
     print(f"\n=== Scenario: {name} ===")
     print("workers:", [(s["id"], "FAULTY" if s["faulty"] else "honest") for s in specs])
     procs = boot_workers(specs)
@@ -63,6 +63,10 @@ def run_scenario(name: str, specs: list[dict]) -> None:
         urls = [f"http://127.0.0.1:{s['port']}" for s in specs]
         result = run_task(urls, task_id=name, text=TEXT)
         print("result:", result)
+        assert result["quorum_met"] is True, f"expected quorum to be met in {name}"
+        assert result["accepted"] == expected_accepted, (
+            f"expected '{expected_accepted}' in {name}, got '{result['accepted']}'"
+        )
     finally:
         for p in procs:
             p.terminate()
@@ -83,6 +87,7 @@ def main() -> None:
             {"id": "w4", "port": 9304, "faulty": False},
             {"id": "w5-faulty", "port": 9305, "faulty": True},
         ],
+        expected_accepted="positive",
     )
     run_scenario(
         "adversarial-majority",
@@ -91,7 +96,14 @@ def main() -> None:
             {"id": "w2-faulty", "port": 9312, "faulty": True},
             {"id": "w3-faulty", "port": 9313, "faulty": True},
         ],
+        # The two faulty workers deterministically flip to the SAME wrong
+        # answer, so quorum confidently accepts it -- the whole point of
+        # this scenario. Asserting the exact wrong answer here (not just
+        # "quorum_met") is what would actually catch a regression in the
+        # flip logic or the vote tally.
+        expected_accepted="negative",
     )
+    print("\nAll checks passed.")
 
 
 if __name__ == "__main__":
