@@ -1,14 +1,16 @@
-# NANDA Quorum Orchestrator
+# Agent Quorum Orchestrator
 
-A working demonstration of the fourth infrastructure gap Project NANDA
-(MIT Media Lab) names for the "Internet of AI Agents" — **Orchestration**
-— alongside a real, unavoidable problem in any multi-agent network:
-you cannot fully trust the output of any single agent, whether it's
-buggy, compromised, or just an unreliable LLM call.
+A working demonstration of **orchestration** for decentralized agent
+networks — alongside a real, unavoidable problem in any multi-agent
+system: you cannot fully trust the output of any single agent, whether
+it's buggy, compromised, or just an unreliable LLM call.
 
-Companion to [`agentfacts-mini-registry`](https://github.com/Varshini-arsh/agentfacts-mini-registry),
-which covers Discovery, Identity/CA, and Attestation. Together the two
-projects touch all four choke points NANDA names.
+Companion to [`agentfacts-mini-registry`](https://github.com/Varshini-arsh/agentfacts-mini-registry)
+(Discovery, Identity/CA, Attestation, Reputation) and
+[`agent-zk-reputation`](https://github.com/Varshini-arsh/agent-zk-reputation)
+(Privacy). Together the three projects cover the core infrastructure a
+decentralized agent network needs: discovery, identity, attestation,
+reputation, orchestration, and privacy.
 
 ## The idea
 
